@@ -10,17 +10,13 @@ If both are set, the container will log in automatically at startup.
 
 ## Example: Upload a file with mega-put
 
-```fish
-# Build the image (use buildx for amd64 if needed)
-docker buildx build --platform linux/amd64 -t megaclid .
+Upload a `test.txt` file from a local folder called `backup` to remote `bkp_mega` folder
+Envs are set in .env file
 
-# Run and upload a file
-set -x MEGA_USER "your@email.com"
-set -x MEGA_PASS "yourpassword"
-docker run --rm -e MEGA_USER -e MEGA_PASS -v (pwd):/data megaclid mega-put /data/myfile.txt /Root
+```fish
+docker run --rm --platform=linux/x86_64 --env-file .env -v $PWD/backup:/backup ghcr.io/felipereyel/megaclid:latest mega-put /backup/test.txt bkp_mega
 ```
 
-This will upload `myfile.txt` from your current directory to your MEGA root folder.
-
 ## Help
+
 By default, the container shows MegaCMD help. Override the command to use other MegaCMD features.
