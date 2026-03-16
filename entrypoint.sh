@@ -1,8 +1,11 @@
 #!/bin/sh
 set -e
 
-if [ -n "$MEGA_USER" ] && [ -n "$MEGA_PASS" ]; then
-    mega-login "$MEGA_USER" "$MEGA_PASS"
+if [ -z "$MEGA_USER" ] || [ -z "$MEGA_PASS" ]; then
+    echo "MEGA_USER and MEGA_PASS environment variables are required" >&2
+    exit 1
 fi
 
-exec "$@"
+mega-login "$MEGA_USER" "$MEGA_PASS"
+trap 'mega-logout' EXIT
+"$@"
